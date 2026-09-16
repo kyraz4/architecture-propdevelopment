@@ -1,0 +1,27 @@
+@startuml PropDevelopment_SmartHome_Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+title PropDevelopment — Контекст новых сервисов «Умный дом»
+
+Person(owner, "Собственник / жилец", "Использует мобильное приложение для управления доступом в дом и просмотра событий.")
+
+System(propApp, "Мобильное приложение PropDevelopment", "Мобильное приложение собственников", "Управление объектами недвижимости, доступом и сервисами «Умный дом».")
+
+System_Ext(smartPlatform, "Платформа «Умный дом» партнёра", "Внешняя платформа IoT / Smart Home", "Управляет интеллектуальным домофоном и интеллектуальным шлагбаумом, выполняет распознавание лиц и автомобильных номеров.")
+
+System_Ext(intercom, "Интеллектуальный домофон", "Smart Intercom", "Видеодомофон, управление дверью и распознавание лиц.")
+
+System_Ext(barrier, "Интеллектуальный шлагбаум", "Smart Barrier", "Управление шлагбаумом и автоматическое распознавание разрешённых автомобильных номеров.")
+
+System_Ext(ad, "Active Directory", "Корпоративная служба каталогов", "Учётные записи сотрудников и централизованная аутентификация.")
+
+Rel(owner, propApp, "Использует", "HTTPS / TLS")
+Rel(propApp, smartPlatform, "Управляет сервисами «Умный дом»", "HTTPS / REST API, OAuth 2.0 / OIDC")
+Rel(smartPlatform, intercom, "Передаёт команды и получает события", "Защищённый API / MQTT over TLS")
+Rel(smartPlatform, barrier, "Передаёт команды и получает события", "Защищённый API / MQTT over TLS")
+
+Rel(propApp, ad, "Аутентификация корпоративных пользователей при необходимости", "OIDC / SAML")
+
+@enduml
